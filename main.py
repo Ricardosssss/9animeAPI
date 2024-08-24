@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Response
-from routers.infosRouter import router as infoR
-from routers.watchRouter import router as infoW
+from routers import episodesRouter, watchRouter, searchRouter
 
 app = FastAPI()
 
-app.include_router(infoR)
-app.include_router(infoW)
+app.include_router(episodesRouter.router)
+app.include_router(watchRouter.router)
+app.include_router(searchRouter.router)
 
 @app.get('/ping')
-def pong():
+def ping():
     return Response('pong')
