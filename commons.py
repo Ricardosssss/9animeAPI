@@ -11,33 +11,29 @@ def getPosterSrc(url: str):
     soup = BeautifulSoup(response.content, 'html.parser')
 
     wrapper = soup.select_one('.anime-poster')
-    img_url = wrapper.select_one('img.film-poster-img')['src']
 
-    return img_url
+    return wrapper.select_one('img.film-poster-img')['src']
 
 def getAnimeInfo(animeId: int):
-    response = requests.get(f'{BASE_URL}/ajax/movie/qtip/{animeId}')
-    soup = BeautifulSoup(response.content, 'html.parser')
+    try:
+        response = requests.get(f'{BASE_URL}/ajax/movie/qtip/{animeId}')
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        wrapper = soup.select('.pre-qtip-line > a')
 
-    type = Type.SERIE if soup.find(class_='pqd-li badge badge-type').text == 'TV Series' else Type.MOVIE
-    
-    wrapper = soup.select('.pre-qtip-line > a')
-    genres = [genre.text for genre in wrapper]
-
-    poster = getPosterSrc(soup.find(class_='btn btn-block btn-play')['href'])
-
-    return Anime(
-        id = animeId,
-        poster_src = poster,
-        title = soup.find(class_='pre-qtip-title').text,
-        type = type.value,
-        description = soup.find(class_='pre-qtip-description').text,
-        genres = genres
-    )
+        return Anime(
+            id = animeId,
+            poster_src = getPosterSrc(soup.find(class_='btn btn-block btn-play')['href']),
+            title = soup.find(class_='pre-qtip-title').text,
+            type = Type.SERIE if soup.find(class_='pqd-li badge badge-type').text == 'TV Series' else Type.MOVIE,
+            description = soup.find(class_='pre-qtip-description').text,
+            genres = [genre.text for genre in wrapper]
+        )
+    except:
+        return None
 
 def generic(path: str):
     response = requests.get(BASE_URL + path)
-    print(response.url)
 
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -53,11 +49,12 @@ def generic(path: str):
     animes: List[Anime] = []
 
     for item in items:
-        try:
-            animes.append(getAnimeInfo(item['data-id']))
-            print(item['data-id'])
-        except:
+        info = getAnimeInfo(item['data-id'])
+
+        if not info:
             continue
+        
+        animes.append(info)
 
     return Page(
         hasNext=next,
