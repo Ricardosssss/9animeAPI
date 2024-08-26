@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 from typing import List
 
-from models.anime import Anime
+from models.poster import Poster
 
 class Page(BaseModel):
-    hasNext: bool
-    data: List[Anime]
+    hasNext: bool = False
+    data: List[Poster]

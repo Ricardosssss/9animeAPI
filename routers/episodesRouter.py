@@ -1,24 +1,19 @@
 import json
 from typing import List
 from bs4 import BeautifulSoup
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 import requests
 
 from commons import BASE_URL
-from models.anime import Episode
+from models.episode import Episode
 
 router = APIRouter(
     prefix='/episodes'
 )
     
 @router.get('/{animeId}')
-def episodesInfo(animeId: int):
-    try:
-        return getEpisodes(animeId)
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=404)
-
+def episodes(animeId: int) -> List[Episode]:
+    return getEpisodes(animeId)
 
 
 def getEpisodes(animeId: int):
@@ -31,10 +26,13 @@ def getEpisodes(animeId: int):
     episodes: List[Episode] = []
 
     for a in aTags:
-        episodes.append(Episode(
-            id = a['data-id'],
-            number = a['data-number'],
-            title = a['title']
-        ))
+        try:
+            episodes.append(Episode(
+                id = a['data-id'],
+                number = a['data-number'],
+                title = a['title']
+            ))
+        except:
+            continue
 
     return episodes

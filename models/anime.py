@@ -2,19 +2,14 @@ from pydantic import BaseModel
 from typing import List
 from enum import Enum
 
-class Type(Enum):
+class ContentType(Enum):
     SERIE = 'serie'
     MOVIE = 'movie'
 
 class Anime(BaseModel):
     id: int
-    poster_src: str
+    image: str
     title: str
-    type: Type = Type.SERIE
+    contentType: ContentType
     description: str
     genres: List[str]
-
-class Episode(BaseModel):
-    id: int
-    number: int
-    title: str
