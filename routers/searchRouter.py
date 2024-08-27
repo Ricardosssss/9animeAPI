@@ -4,9 +4,9 @@ from commons import generic
 from models.page import Page
 
 router = APIRouter(
-    prefix='/search'
+    prefix="/search"
 )
 
-@router.get('/')
+@router.get("/")
 def search(keyword: str, page: int = 1) -> Page:
-    return generic(f'/search?keyword={keyword}&page={page}')
+    return generic(f"/search?keyword={keyword}&page={page}")

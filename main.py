@@ -8,6 +8,6 @@ app.include_router(watchRouter.router)
 app.include_router(searchRouter.router)
 app.include_router(infosRouter.router)
 
-@app.get('/ping')
+@app.get("/ping")
 def ping():
-    return Response('pong')
+    return Response("pong")

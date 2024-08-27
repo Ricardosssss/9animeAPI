@@ -7,10 +7,10 @@ from models.source import *
 from commons import BASE_URL
 
 router = APIRouter(
-    prefix='/watch'
+    prefix="/watch"
 )
 
-@router.get('/{epId}')
+@router.get("/{epId}")
 def watch(epId: int) -> Source:
     source = getSource(epId)
     
@@ -23,18 +23,18 @@ def watch(epId: int) -> Source:
 
 def getSource(episodeId: int):
     try:
-        serversResponse = requests.get(BASE_URL + f'/ajax/episode/servers?episodeId={episodeId}')
-        serversHtml = json.loads(serversResponse.content)['html']
-        soup = BeautifulSoup(serversHtml, 'html.parser')
+        serversResponse = requests.get(BASE_URL + f"/ajax/episode/servers?episodeId={episodeId}")
+        serversHtml = json.loads(serversResponse.content)["html"]
+        soup = BeautifulSoup(serversHtml, "html.parser")
 
-        providerId = soup.find('div', class_='item server-item', attrs={'data-type': 'sub', 'data-server-id': '4'})['data-id']
+        providerId = soup.find("div", class_="item server-item", attrs={"data-type": "sub", "data-server-id": "4"})["data-id"]
 
-        idkResponse = requests.get(BASE_URL + f'/ajax/episode/sources?id={providerId}')
+        idkResponse = requests.get(BASE_URL + f"/ajax/episode/sources?id={providerId}")
         idkLink: str = json.loads(idkResponse.content)["link"]
 
-        sourceId = idkLink.split('/embed-6-v2/')[1].split('?')[0]
+        sourceId = idkLink.split("/embed-6-v2/")[1].split("?")[0]
 
-        sourceResponse = requests.get(f'https://rapid-cloud.co/ajax/embed-6-v2/getSources?id={sourceId}')
+        sourceResponse = requests.get(f"https://rapid-cloud.co/ajax/embed-6-v2/getSources?id={sourceId}")
         source = json.loads(sourceResponse.content)
 
         intro = Intro(
