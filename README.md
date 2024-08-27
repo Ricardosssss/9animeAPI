@@ -6,7 +6,7 @@ Tomorrow, I'll write the description, LOL.
 
 #### Returns some information about a given anime
 
-```http
+```
   GET /infos/${animeId}
 ```
 
@@ -17,7 +17,7 @@ Tomorrow, I'll write the description, LOL.
 
 #### Returns all episodes from a given anime
 
-```http
+```
   GET /episodes/${animeId}
 ```
 
@@ -28,7 +28,7 @@ Tomorrow, I'll write the description, LOL.
 
 #### Returns all animes based on your search
 
-```http
+```
   GET /search
 ```
 
@@ -40,7 +40,7 @@ Tomorrow, I'll write the description, LOL.
 
 #### Provide the m3u8 file and some additional data about the episode
 
-```http
+```
   GET /watch/${episodeId}
 ```
 
