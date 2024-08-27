@@ -1,7 +1,13 @@
 from fastapi import FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 from routers import episodesRouter, watchRouter, searchRouter, infosRouter, typeRouter
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"]
+)
 
 app.include_router(episodesRouter.router)
 app.include_router(watchRouter.router)
