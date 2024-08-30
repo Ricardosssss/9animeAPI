@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from commons import generic
 from models.page import Page
@@ -8,5 +8,10 @@ router = APIRouter(
 )
 
 @router.get("/")
-def search(keyword: str, page: int = 1) -> Page:
-    return generic(f"/search?keyword={keyword}&page={page}")
+def search(keyword: str, page: int = 1):
+    search = generic(f"/search?keyword={keyword}&page={page}")
+    
+    if not search:
+        raise HTTPException(status_code=404)
+    
+    return search

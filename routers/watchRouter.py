@@ -27,13 +27,20 @@ def getSource(episodeId: int):
         serversHtml = json.loads(serversResponse.content)["html"]
         soup = BeautifulSoup(serversHtml, "html.parser")
 
-        providerId = soup.find("div", class_="item server-item", attrs={"data-type": "sub", "data-server-id": "4"})["data-id"]
+        sub = soup.find("div", class_="item server-item", attrs={"data-type": "sub", "data-server-id": "4"})
+        dub = soup.find("div", class_="item server-item", attrs={"data-type": "dub", "data-server-id": "4"})
+
+        if sub:
+            providerId = sub["data-id"]
+        elif dub:
+            providerId = dub["data-id"]
+        else:
+            raise Exception()
 
         idkResponse = requests.get(BASE_URL + f"/ajax/episode/sources?id={providerId}")
         idkLink: str = json.loads(idkResponse.content)["link"]
 
         sourceId = idkLink.split("/embed-6-v2/")[1].split("?")[0]
-
         sourceResponse = requests.get(f"https://rapid-cloud.co/ajax/embed-6-v2/getSources?id={sourceId}")
         source = json.loads(sourceResponse.content)
 

@@ -20,6 +20,9 @@ def generic(path: str):
     wrapper = soup.find("div", class_="film_list-wrap")
     items = wrapper.find_all("div", class_="flw-item item-qtip")
 
+    if not len(items):
+        return None
+
     posters: List[Poster] = []
 
     for item in items:
